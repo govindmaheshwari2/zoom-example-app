@@ -10,15 +10,15 @@ Zoom is the most popular video and audio conferencing app. From interacting with
 
 This post will take you through a step by step guide on how to build a basic Zoom like app using Flutter and 100ms' live audio-video SDK in the following way -
 
-*Add 100ms to a Flutter app
-*Join a room
-*Leave a room
-*Show video tiles with the user’s name
-*Show Screenshare tile
-*hand Raised
-*Mute/Unmute
-*Camera off/on
-*Toggle Front/Back camera
-*Chatting with everyone in the room
+* Add 100ms to a Flutter app
+* Join a room
+* Leave a room
+* Show video tiles with the user’s name
+* Show Screenshare tile
+* hand Raised
+* Mute/Unmute
+* Camera off/on
+* Toggle Front/Back camera
+* Chatting with everyone in the room
 
 ![alt-text](https://github.com/govindmaheshwari2/zoom-example-app/blob/master/final.gif)
