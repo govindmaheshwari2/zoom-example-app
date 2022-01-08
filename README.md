@@ -1,16 +1,24 @@
-# zoom
+# zoom Clone
 
-A new Flutter project.
+This is a final version of the app for starter kit download starter branch in this repo.
 
-## Getting Started
+Building Zoom clone in Flutter with 100ms SDK
 
-This project is a starting point for a Flutter application.
+Step by Step guide available at : https://www.100ms.live/blog/zoom-clone-in-flutter
 
-A few resources to get you started if this is your first Flutter project:
+Zoom is the most popular video and audio conferencing app. From interacting with co-workers to organizing events like workshops and webinars, Zoom is everywhere.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+This post will take you through a step by step guide on how to build a basic Zoom like app using Flutter and 100ms' live audio-video SDK in the following way -
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+*Add 100ms to a Flutter app
+*Join a room
+*Leave a room
+*Show video tiles with the user’s name
+*Show Screenshare tile
+*hand Raised
+*Mute/Unmute
+*Camera off/on
+*Toggle Front/Back camera
+*Chatting with everyone in the room
+
+![alt-text](https://github.com/govindmaheshwari2/zoom-example-app/blob/master/final.gif)
