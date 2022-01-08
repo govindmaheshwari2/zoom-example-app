@@ -2,25 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:hmssdk_flutter/hmssdk_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:zoom/setup/meeting_store.dart';
 
 class Message extends StatefulWidget {
-  final MeetingStore meetingStore;
-  Message({Key? key, required this.meetingStore}) : super(key: key);
+  Message({Key? key, meetingStore}) : super(key: key);
 
   @override
   _MessageState createState() => _MessageState();
 }
 
 class _MessageState extends State<Message> {
-  late MeetingStore _meetingStore;
   late double widthOfScreen;
   TextEditingController messageTextController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _meetingStore = widget.meetingStore;
   }
 
   @override
@@ -58,69 +54,7 @@ class _MessageState extends State<Message> {
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Observer(
-                    builder: (_) {
-                      if (!_meetingStore.isMeetingStarted) {
-                        return const SizedBox();
-                      }
-                      if (_meetingStore.messages.isEmpty) {
-                        return const Center(child: Text('No messages'));
-                      }
-                      return ListView.separated(
-                        itemCount: _meetingStore.messages.length,
-                        itemBuilder: (itemBuilder, index) {
-                          return Container(
-                            padding: const EdgeInsets.all(5.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        _meetingStore
-                                                .messages[index].sender?.name ??
-                                            "",
-                                        style: const TextStyle(
-                                            fontSize: 10.0,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Text(
-                                      _meetingStore.messages[index].time
-                                          .toString(),
-                                      style: const TextStyle(
-                                          fontSize: 10.0,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w900),
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 10.0,
-                                ),
-                                Text(
-                                  _meetingStore.messages[index].message
-                                      .toString(),
-                                  style: const TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w300),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const Divider();
-                        },
-                      );
-                    },
-                  ),
-                ),
+                Expanded(child: Container()),
                 Container(
                   color: Colors.grey,
                   margin: const EdgeInsets.only(top: 10.0),
@@ -144,28 +78,7 @@ class _MessageState extends State<Message> {
                         width: widthOfScreen - 45.0,
                       ),
                       GestureDetector(
-                        onTap: () {
-                          String message = messageTextController.text;
-                          if (message.isEmpty) return;
-
-                          DateTime currentTime = DateTime.now();
-                          final DateFormat formatter =
-                              DateFormat('d MMM y hh:mm:ss a');
-
-                          _meetingStore.sendMessage(message);
-                          _meetingStore.addMessage(HMSMessage(
-                            sender: _meetingStore.localPeer!,
-                            message: message,
-                            type: "chat",
-                            time: formatter.format(currentTime),
-                            hmsMessageRecipient: HMSMessageRecipient(
-                                recipientPeer: null,
-                                recipientRoles: null,
-                                hmsMessageRecipientType:
-                                    HMSMessageRecipientType.BROADCAST),
-                          ));
-                          messageTextController.clear();
-                        },
+                        onTap: () {},
                         child: const Icon(
                           Icons.double_arrow,
                           size: 40.0,
@@ -181,7 +94,7 @@ class _MessageState extends State<Message> {
   }
 }
 
-void chatMessages(BuildContext context, MeetingStore meetingStore) {
+void chatMessages(BuildContext context, meetingStore) {
   showModalBottomSheet(
       context: context,
       builder: (ctx) => Message(meetingStore: meetingStore),

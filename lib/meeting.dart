@@ -3,8 +3,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:hmssdk_flutter/hmssdk_flutter.dart';
 import 'package:mobx/mobx.dart';
 import 'package:zoom/message.dart';
-import 'package:zoom/setup/meeting_controller.dart';
-import 'package:zoom/setup/meeting_store.dart';
 import 'package:zoom/setup/peerTrackNode.dart';
 
 class Meeting extends StatefulWidget {
@@ -18,27 +16,14 @@ class Meeting extends StatefulWidget {
 }
 
 class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
-  late MeetingStore _meetingStore;
   bool selfLeave = false;
   bool raisedHand = false;
 
-  initMeeting() async {
-    bool ans = await _meetingStore.joinMeeting();
-    if (!ans) {
-      const SnackBar(content: Text("Unable to Join"));
-      Navigator.of(context).pop();
-    }
-    _meetingStore.startListen();
-  }
+  initMeeting() async {}
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
-    _meetingStore = MeetingStore();
-    MeetingController meetingController =
-        MeetingController(roomUrl: widget.roomLink, user: widget.name);
-    _meetingStore.meetingController = meetingController;
 
     initMeeting();
   }
@@ -53,12 +38,13 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
           actions: [
             IconButton(
                 onPressed: () {
-                  _meetingStore.toggleCamera();
+                  // Camera Toggle front to back and vice versa
                 },
                 icon: const Icon(Icons.camera_front)),
             IconButton(
                 onPressed: () {
-                  chatMessages(context, _meetingStore);
+                  // Uncomment to start meeting page
+                  // chatMessages(context, _meetingStore);
                 },
                 icon: const Icon(Icons.message)),
           ],
@@ -74,21 +60,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                   child: Column(
                     children: [
                       Flexible(
-                        child: Observer(
-                          builder: (_) {
-                            if (_meetingStore.isRoomEnded && !selfLeave) {
-                              Navigator.pop(context);
-                            }
-                            if (_meetingStore.peerTracks.isEmpty) {
-                              return const Center(
-                                  child: Text('Waiting for others to join!'));
-                            }
-                            ObservableList<PeerTracKNode> peerFilteredList =
-                                _meetingStore.peerTracks;
-
-                            return videoPageView(peerFilteredList);
-                          },
-                        ),
+                        child: Container(),
                       ),
                     ],
                   ),
@@ -108,11 +80,9 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                       return CircleAvatar(
                         backgroundColor: Colors.black,
                         child: IconButton(
-                          icon: _meetingStore.isMicOn
-                              ? const Icon(Icons.mic)
-                              : const Icon(Icons.mic_off),
+                          icon: const Icon(Icons.mic),
                           onPressed: () {
-                            _meetingStore.toggleAudio();
+                            // Toggle mic
                           },
                           color: Colors.blue,
                         ),
@@ -122,11 +92,9 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                       return CircleAvatar(
                         backgroundColor: Colors.black,
                         child: IconButton(
-                          icon: _meetingStore.isVideoOn
-                              ? const Icon(Icons.videocam)
-                              : const Icon(Icons.videocam_off),
+                          icon: const Icon(Icons.videocam),
                           onPressed: () {
-                            _meetingStore.toggleVideo();
+                            // Toggle video
                           },
                           color: Colors.blue,
                         ),
@@ -146,7 +114,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                             setState(() {
                               raisedHand = !raisedHand;
                             });
-                            _meetingStore.raiseHand();
+                            // Toggle Raise Hand
                           },
                           color: Colors.blue,
                         ),
@@ -157,7 +125,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                       child: IconButton(
                         icon: const Icon(Icons.call_end),
                         onPressed: () {
-                          _meetingStore.leaveMeeting();
+                          // leave meeting
                           selfLeave = true;
                           Navigator.pop(context);
                         },
@@ -186,7 +154,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
               actions: [
                 TextButton(
                     onPressed: () => {
-                          _meetingStore.leaveMeeting(),
+                          // leave meeting
                           Navigator.pop(context, true),
                         },
                     child: const Text('Yes',
@@ -202,17 +170,9 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
 
   Widget videoPageView(List<PeerTracKNode> filteredList) {
     List<Widget> pageChild = [];
-    if (_meetingStore.screenShareTrack != null) {
-      pageChild.add(RotatedBox(
-        quarterTurns: 1,
-        child: Container(
-            margin:
-                const EdgeInsets.only(bottom: 0, left: 0, right: 100, top: 0),
-            child: Observer(builder: (context) {
-              return HMSVideoView(track: _meetingStore.screenShareTrack!);
-            })),
-      ));
-    }
+
+    // Screen share code and add it to pageChild for viewing it at first page
+
     for (int i = 0; i < filteredList.length; i = i + 6) {
       if (filteredList.length - i > 5) {
         Widget temp = singleVideoPageView(6, i, filteredList);
@@ -240,26 +200,30 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
   }
 
   Widget videoViewGrid(int count, int start, List<PeerTracKNode> tracks) {
-    ObservableMap<String, HMSTrackUpdate> trackUpdate =
-        _meetingStore.trackStatus;
-    ObservableList<HMSPeer> peers = _meetingStore.peers;
+    //  ObservableMap<String, HMSTrackUpdate> trackUpdate =_meetingStore.trackStatus;
+    //  ObservableList<HMSPeer> peers = _meetingStore.peers;
 
     return GridView.builder(
       itemCount: count,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (itemBuilder, index) {
-        return Observer(builder: (context) {
-          HMSPeer peer = peers[peers.indexWhere(
-              (element) => element.peerId == tracks[start + index].peerId)];
-          return videoTile(
-              tracks[start + index],
-              !(tracks[start + index].track?.peer?.isLocal ?? false
-                  ? !_meetingStore.isVideoOn
-                  : (trackUpdate[tracks[start + index].peerId]) ==
-                      HMSTrackUpdate.trackMuted),
-              MediaQuery.of(context).size.width / 2 - 25,
-              peer.metadata.toString() == "{\"isHandRaised\":true}");
-        });
+        return Container();
+
+        // TODO: Uncomment below lines to render video it will pass important parameters like raise hand,
+        // video status, tracks, find peerId
+
+        // return Observer(builder: (context) {
+        //   HMSPeer peer = peers[peers.indexWhere(
+        //       (element) => element.peerId == tracks[start + index].peerId)];
+        //   return videoTile(
+        //       tracks[start + index],
+        //       !(tracks[start + index].track?.peer?.isLocal ?? false
+        //           ? !_meetingStore.isVideoOn
+        //           : (trackUpdate[tracks[start + index].peerId]) ==
+        //               HMSTrackUpdate.trackMuted),
+        //       MediaQuery.of(context).size.width / 2 - 25,
+        //       peer.metadata.toString() == "{\"isHandRaised\":true}");
+        // });
       },
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -279,52 +243,20 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
             Align(
               alignment: Alignment.center,
               child: SizedBox(
-                width: size,
-                height: size,
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: (track.track != null && isVideoMuted)
-                        ? HMSVideoView(
-                            track: track.track!,
-                          )
-                        : Container(
-                            width: 200,
-                            height: 200,
-                            color: Colors.black,
-                            child: Center(
-                              child: CircleAvatar(
-                                radius: 50,
-                                backgroundColor: Colors.green,
-                                child: track.name.contains(" ")
-                                    ? Text(
-                                        (track.name.toString().substring(0, 1) +
-                                                track.name
-                                                    .toString()
-                                                    .split(" ")[1]
-                                                    .substring(0, 1))
-                                            .toUpperCase(),
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w700),
-                                      )
-                                    : Text(track.name
-                                        .toString()
-                                        .substring(0, 1)
-                                        .toUpperCase()),
-                              ),
-                            ))),
-              ),
+                  width: size,
+                  height: size,
+                  child: Container(
+                      // HMSVideoView implementation
+                      )),
             ),
             const SizedBox(
               height: 10,
             ),
             Align(
-              alignment: Alignment.bottomCenter,
-              child: Text(
-                track.name,
-                style: const TextStyle(fontWeight: FontWeight.w700),
-              ),
-            )
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                    // Username (track.name) inside text widget
+                    ))
           ],
         ),
         Align(
