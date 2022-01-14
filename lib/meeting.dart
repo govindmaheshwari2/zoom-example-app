@@ -3,7 +3,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:hmssdk_flutter/hmssdk_flutter.dart';
 import 'package:mobx/mobx.dart';
 import 'package:zoom/message.dart';
-import 'package:zoom/setup/meeting_controller.dart';
 import 'package:zoom/setup/meeting_store.dart';
 import 'package:zoom/setup/peerTrackNode.dart';
 
@@ -19,11 +18,11 @@ class Meeting extends StatefulWidget {
 
 class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
   late MeetingStore _meetingStore;
-  bool selfLeave = false;
   bool raisedHand = false;
+  bool selfLeave = false;
 
   initMeeting() async {
-    bool ans = await _meetingStore.joinMeeting();
+    bool ans = await _meetingStore.join(widget.name, widget.roomLink);
     if (!ans) {
       const SnackBar(content: Text("Unable to Join"));
       Navigator.of(context).pop();
@@ -36,10 +35,6 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
     _meetingStore = MeetingStore();
-    MeetingController meetingController =
-        MeetingController(roomUrl: widget.roomLink, user: widget.name);
-    _meetingStore.meetingController = meetingController;
-
     initMeeting();
   }
 
@@ -53,14 +48,14 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
           actions: [
             IconButton(
                 onPressed: () {
-                  _meetingStore.toggleCamera();
+                  _meetingStore.switchCamera();
                 },
                 icon: const Icon(Icons.camera_front)),
             IconButton(
                 onPressed: () {
                   chatMessages(context, _meetingStore);
                 },
-                icon: const Icon(Icons.message)),
+                icon: const Icon(Icons.message))
           ],
         ),
         body: Stack(
@@ -86,7 +81,9 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                             ObservableList<PeerTracKNode> peerFilteredList =
                                 _meetingStore.peerTracks;
 
-                            return videoPageView(peerFilteredList);
+                            return videoPageView(
+                              filteredList: peerFilteredList,
+                            );
                           },
                         ),
                       ),
@@ -112,7 +109,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                               ? const Icon(Icons.mic)
                               : const Icon(Icons.mic_off),
                           onPressed: () {
-                            _meetingStore.toggleAudio();
+                            _meetingStore.switchAudio();
                           },
                           color: Colors.blue,
                         ),
@@ -126,27 +123,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                               ? const Icon(Icons.videocam)
                               : const Icon(Icons.videocam_off),
                           onPressed: () {
-                            _meetingStore.toggleVideo();
-                          },
-                          color: Colors.blue,
-                        ),
-                      );
-                    }),
-                    Observer(builder: (context) {
-                      return CircleAvatar(
-                        backgroundColor: Colors.black,
-                        child: IconButton(
-                          icon: Image.asset(
-                            'assets/raise_hand.png',
-                            color: raisedHand
-                                ? Colors.amber.shade300
-                                : Colors.grey,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              raisedHand = !raisedHand;
-                            });
-                            _meetingStore.raiseHand();
+                            _meetingStore.switchVideo();
                           },
                           color: Colors.blue,
                         ),
@@ -155,9 +132,26 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                     CircleAvatar(
                       backgroundColor: Colors.black,
                       child: IconButton(
+                        icon: Image.asset(
+                          'assets/raise_hand.png',
+                          color:
+                              raisedHand ? Colors.amber.shade300 : Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            raisedHand = !raisedHand;
+                          });
+                          _meetingStore.changeMetadata();
+                        },
+                        color: Colors.blue,
+                      ),
+                    ),
+                    CircleAvatar(
+                      backgroundColor: Colors.black,
+                      child: IconButton(
                         icon: const Icon(Icons.call_end),
                         onPressed: () {
-                          _meetingStore.leaveMeeting();
+                          _meetingStore.leave();
                           selfLeave = true;
                           Navigator.pop(context);
                         },
@@ -182,25 +176,25 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
     return showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-              title: const Text('Leave the Meeting?'),
+              title: const Text('Leave the Meeting?',
+                  style: TextStyle(fontSize: 24)),
               actions: [
-                TextButton(
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(primary: Colors.red),
                     onPressed: () => {
-                          _meetingStore.leaveMeeting(),
+                          _meetingStore.leave(),
                           Navigator.pop(context, true),
                         },
-                    child: const Text('Yes',
-                        style: TextStyle(height: 1, fontSize: 24))),
-                TextButton(
+                    child: const Text('Yes', style: TextStyle(fontSize: 24))),
+                ElevatedButton(
                     onPressed: () => Navigator.pop(context, false),
-                    child: const Text('Cancel',
-                        style: TextStyle(
-                            height: 1, fontSize: 24, color: Colors.red))),
+                    child:
+                        const Text('Cancel', style: TextStyle(fontSize: 24))),
               ],
             ));
   }
 
-  Widget videoPageView(List<PeerTracKNode> filteredList) {
+  Widget videoPageView({required List<PeerTracKNode> filteredList}) {
     List<Widget> pageChild = [];
     if (_meetingStore.screenShareTrack != null) {
       pageChild.add(RotatedBox(
@@ -258,7 +252,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                   : (trackUpdate[tracks[start + index].peerId]) ==
                       HMSTrackUpdate.trackMuted),
               MediaQuery.of(context).size.width / 2 - 25,
-              peer.metadata.toString() == "{\"isHandRaised\":true}");
+              peer.metadata == "{\"isHandRaised\":true}");
         });
       },
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -341,5 +335,25 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
         ),
       ],
     );
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      if (_meetingStore.isVideoOn) {
+        _meetingStore.startCapturing();
+      } else {
+        _meetingStore.stopCapturing();
+      }
+    } else if (state == AppLifecycleState.paused) {
+      if (_meetingStore.isVideoOn) {
+        _meetingStore.stopCapturing();
+      }
+    } else if (state == AppLifecycleState.inactive) {
+      if (_meetingStore.isVideoOn) {
+        _meetingStore.stopCapturing();
+      }
+    }
   }
 }
