@@ -40,21 +40,6 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$errorAtom = Atom(name: 'MeetingStoreBase.error');
-
-  @override
-  HMSException? get error {
-    _$errorAtom.reportRead();
-    return super.error;
-  }
-
-  @override
-  set error(HMSException? value) {
-    _$errorAtom.reportWrite(value, super.error, () {
-      super.error = value;
-    });
-  }
-
   final _$hmsExceptionAtom = Atom(name: 'MeetingStoreBase.hmsException');
 
   @override
@@ -221,6 +206,21 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
   set isRecordingStarted(bool value) {
     _$isRecordingStartedAtom.reportWrite(value, super.isRecordingStarted, () {
       super.isRecordingStarted = value;
+    });
+  }
+
+  final _$eventAtom = Atom(name: 'MeetingStoreBase.event');
+
+  @override
+  String get event {
+    _$eventAtom.reportRead();
+    return super.event;
+  }
+
+  @override
+  set event(String value) {
+    _$eventAtom.reportWrite(value, super.event, () {
+      super.event = value;
     });
   }
 
@@ -455,40 +455,33 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$toggleVideoAsyncAction = AsyncAction('MeetingStoreBase.toggleVideo');
+  final _$joinAsyncAction = AsyncAction('MeetingStoreBase.join');
 
   @override
-  Future<void> toggleVideo() {
-    return _$toggleVideoAsyncAction.run(() => super.toggleVideo());
+  Future<bool> join(String user, String roomUrl) {
+    return _$joinAsyncAction.run(() => super.join(user, roomUrl));
   }
 
-  final _$toggleCameraAsyncAction =
-      AsyncAction('MeetingStoreBase.toggleCamera');
+  final _$switchAudioAsyncAction = AsyncAction('MeetingStoreBase.switchAudio');
 
   @override
-  Future<void> toggleCamera() {
-    return _$toggleCameraAsyncAction.run(() => super.toggleCamera());
+  Future<void> switchAudio() {
+    return _$switchAudioAsyncAction.run(() => super.switchAudio());
   }
 
-  final _$toggleAudioAsyncAction = AsyncAction('MeetingStoreBase.toggleAudio');
+  final _$switchVideoAsyncAction = AsyncAction('MeetingStoreBase.switchVideo');
 
   @override
-  Future<void> toggleAudio() {
-    return _$toggleAudioAsyncAction.run(() => super.toggleAudio());
+  Future<void> switchVideo() {
+    return _$switchVideoAsyncAction.run(() => super.switchVideo());
   }
 
-  final _$joinMeetingAsyncAction = AsyncAction('MeetingStoreBase.joinMeeting');
+  final _$switchCameraAsyncAction =
+      AsyncAction('MeetingStoreBase.switchCamera');
 
   @override
-  Future<bool> joinMeeting() {
-    return _$joinMeetingAsyncAction.run(() => super.joinMeeting());
-  }
-
-  final _$sendMessageAsyncAction = AsyncAction('MeetingStoreBase.sendMessage');
-
-  @override
-  Future<void> sendMessage(String message) {
-    return _$sendMessageAsyncAction.run(() => super.sendMessage(message));
+  Future<void> switchCamera() {
+    return _$switchCameraAsyncAction.run(() => super.switchCamera());
   }
 
   final _$MeetingStoreBaseActionController =
@@ -511,6 +504,17 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
         name: 'MeetingStoreBase.removeListenerMeeting');
     try {
       return super.removeListenerMeeting();
+    } finally {
+      _$MeetingStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void sendBroadcastMessage(String message) {
+    final _$actionInfo = _$MeetingStoreBaseActionController.startAction(
+        name: 'MeetingStoreBase.sendBroadcastMessage');
+    try {
+      return super.sendBroadcastMessage(message);
     } finally {
       _$MeetingStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -616,17 +620,6 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
   }
 
   @override
-  void updateError(HMSException error) {
-    final _$actionInfo = _$MeetingStoreBaseActionController.startAction(
-        name: 'MeetingStoreBase.updateError');
-    try {
-      return super.updateError(error);
-    } finally {
-      _$MeetingStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void updateRoleChangeRequest(HMSRoleChangeRequest roleChangeRequest) {
     final _$actionInfo = _$MeetingStoreBaseActionController.startAction(
         name: 'MeetingStoreBase.updateRoleChangeRequest');
@@ -699,7 +692,6 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     return '''
 isSpeakerOn: ${isSpeakerOn},
 screenSharePeerId: ${screenSharePeerId},
-error: ${error},
 hmsException: ${hmsException},
 roleChangeRequest: ${roleChangeRequest},
 isMeetingStarted: ${isMeetingStarted},
@@ -711,6 +703,7 @@ reconnecting: ${reconnecting},
 reconnected: ${reconnected},
 isRoomEnded: ${isRoomEnded},
 isRecordingStarted: ${isRecordingStarted},
+event: ${event},
 hmsTrackChangeRequest: ${hmsTrackChangeRequest},
 roles: ${roles},
 peers: ${peers},
