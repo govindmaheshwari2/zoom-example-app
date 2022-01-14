@@ -31,9 +31,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   TextEditingController txtName =
-      TextEditingController(text: "Govind Maheshwari");
+      TextEditingController(text: "");
   TextEditingController txtId = TextEditingController(
-      text: "https://clubhouse1.app.100ms.live/meeting/wce-kmi-jce");
+      text: "");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
             child: TextField(
               controller: txtId,
               decoration: const InputDecoration(
-                  border: InputBorder.none, hintText: 'Enter Room Id'),
+                  border: InputBorder.none, hintText: 'Enter Room Link'),
             ),
           ),
           ElevatedButton(
