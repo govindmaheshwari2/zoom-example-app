@@ -15,12 +15,17 @@ class Message extends StatefulWidget {
 class _MessageState extends State<Message> {
   late MeetingStore _meetingStore;
   late double widthOfScreen;
+  late List<HMSRole> hmsRoles;
   TextEditingController messageTextController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
     _meetingStore = widget.meetingStore;
+    getRoles();
+  }
+
+  void getRoles() async {
+    hmsRoles = await _meetingStore.getRoles();
   }
 
   @override
@@ -65,7 +70,7 @@ class _MessageState extends State<Message> {
                         return const SizedBox();
                       }
                       if (_meetingStore.messages.isEmpty) {
-                        return const Center(child: Text('No messages'));
+                        return const Text('No messages');
                       }
                       return ListView.separated(
                         itemCount: _meetingStore.messages.length,
@@ -150,9 +155,9 @@ class _MessageState extends State<Message> {
 
                           DateTime currentTime = DateTime.now();
                           final DateFormat formatter =
-                              DateFormat('d MMM y hh:mm:ss a');
+                              DateFormat('yyyy-MMM-dd hh:mm a');
 
-                          _meetingStore.sendMessage(message);
+                          _meetingStore.sendBroadcastMessage(message);
                           _meetingStore.addMessage(HMSMessage(
                             sender: _meetingStore.localPeer!,
                             message: message,
