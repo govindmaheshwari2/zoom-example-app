@@ -1,7 +1,6 @@
 //Package imports
 import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
-import 'package:uuid/uuid.dart';
 
 //Project imports
 import 'package:hmssdk_flutter/hmssdk_flutter.dart';
@@ -120,7 +119,6 @@ abstract class MeetingStoreBase extends ChangeNotifier
         await RoomService().getToken(user: user, room: roomUrl);
     if (token == null) return false;
     HMSConfig config = HMSConfig(
-        userId: Uuid().v1(),
         authToken: token[0]!,
         userName: user,
         endPoint: token[1] == "true" ? "" : "https://qa-init.100ms.live/init");
