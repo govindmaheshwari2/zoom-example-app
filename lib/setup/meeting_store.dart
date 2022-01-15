@@ -7,7 +7,7 @@ import 'package:hmssdk_flutter/hmssdk_flutter.dart';
 import 'package:zoom/setup/HmsSdkManager.dart';
 import 'package:zoom/setup/hms_sdk_interactor.dart';
 import 'package:zoom/setup/peerTrackNode.dart';
-import 'package:zoom/setup/room_service.dart';
+import 'package:zoom/service/room_service.dart';
 
 part 'meeting_store.g.dart';
 
