@@ -368,7 +368,7 @@ abstract class MeetingStoreBase extends ChangeNotifier
     if (track.source == "REGULAR") {
       int index =
           peerTracks.indexWhere((element) => element.peerId == peer.peerId);
-      peerTracks[index].track = track;
+      if (index != -1) peerTracks[index].track = track;
     }
 
     peerOperationWithTrack(peer, trackUpdate, track);
