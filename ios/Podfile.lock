@@ -1,11 +1,11 @@
 PODS:
   - Flutter (1.0.0)
-  - HMSSDK (0.2.2):
-    - HMSWebRTC (= 1.0.4516)
+  - HMSSDK (0.2.4):
+    - HMSWebRTC (= 1.0.4518)
   - hmssdk_flutter (0.5.0):
     - Flutter
     - HMSSDK
-  - HMSWebRTC (1.0.4516)
+  - HMSWebRTC (1.0.4518)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
