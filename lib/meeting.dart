@@ -245,8 +245,6 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (itemBuilder, index) {
         return Observer(builder: (context) {
-          HMSPeer peer = peers[peers.indexWhere(
-              (element) => element.peerId == tracks[start + index].peerId)];
           return videoTile(
               tracks[start + index],
               !(tracks[start + index].track?.peer?.isLocal ?? false
