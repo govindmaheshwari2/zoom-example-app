@@ -55,6 +55,36 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
+  final _$hasHlsStartedAtom = Atom(name: 'MeetingStoreBase.hasHlsStarted');
+
+  @override
+  bool get hasHlsStarted {
+    _$hasHlsStartedAtom.reportRead();
+    return super.hasHlsStarted;
+  }
+
+  @override
+  set hasHlsStarted(bool value) {
+    _$hasHlsStartedAtom.reportWrite(value, super.hasHlsStarted, () {
+      super.hasHlsStarted = value;
+    });
+  }
+
+  final _$isHLSLinkAtom = Atom(name: 'MeetingStoreBase.isHLSLink');
+
+  @override
+  bool get isHLSLink {
+    _$isHLSLinkAtom.reportRead();
+    return super.isHLSLink;
+  }
+
+  @override
+  set isHLSLink(bool value) {
+    _$isHLSLinkAtom.reportWrite(value, super.isHLSLink, () {
+      super.isHLSLink = value;
+    });
+  }
+
   final _$roleChangeRequestAtom =
       Atom(name: 'MeetingStoreBase.roleChangeRequest');
 
@@ -136,15 +166,32 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
       Atom(name: 'MeetingStoreBase.screenShareTrack');
 
   @override
-  HMSTrack? get screenShareTrack {
+  ObservableList<HMSTrack?> get screenShareTrack {
     _$screenShareTrackAtom.reportRead();
     return super.screenShareTrack;
   }
 
   @override
-  set screenShareTrack(HMSTrack? value) {
+  set screenShareTrack(ObservableList<HMSTrack?> value) {
     _$screenShareTrackAtom.reportWrite(value, super.screenShareTrack, () {
       super.screenShareTrack = value;
+    });
+  }
+
+  final _$curentScreenShareTrackAtom =
+      Atom(name: 'MeetingStoreBase.curentScreenShareTrack');
+
+  @override
+  HMSTrack? get curentScreenShareTrack {
+    _$curentScreenShareTrackAtom.reportRead();
+    return super.curentScreenShareTrack;
+  }
+
+  @override
+  set curentScreenShareTrack(HMSTrack? value) {
+    _$curentScreenShareTrackAtom
+        .reportWrite(value, super.curentScreenShareTrack, () {
+      super.curentScreenShareTrack = value;
     });
   }
 
@@ -484,26 +531,35 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     return _$switchCameraAsyncAction.run(() => super.switchCamera());
   }
 
+  final _$isScreenShareActiveAsyncAction =
+      AsyncAction('MeetingStoreBase.isScreenShareActive');
+
+  @override
+  Future<void> isScreenShareActive() {
+    return _$isScreenShareActiveAsyncAction
+        .run(() => super.isScreenShareActive());
+  }
+
   final _$MeetingStoreBaseActionController =
       ActionController(name: 'MeetingStoreBase');
 
   @override
-  void startListen() {
+  void addUpdateListener() {
     final _$actionInfo = _$MeetingStoreBaseActionController.startAction(
-        name: 'MeetingStoreBase.startListen');
+        name: 'MeetingStoreBase.addUpdateListener');
     try {
-      return super.startListen();
+      return super.addUpdateListener();
     } finally {
       _$MeetingStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void removeListenerMeeting() {
+  void removeUpdateListener() {
     final _$actionInfo = _$MeetingStoreBaseActionController.startAction(
-        name: 'MeetingStoreBase.removeListenerMeeting');
+        name: 'MeetingStoreBase.removeUpdateListener');
     try {
-      return super.removeListenerMeeting();
+      return super.removeUpdateListener();
     } finally {
       _$MeetingStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -693,12 +749,15 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
 isSpeakerOn: ${isSpeakerOn},
 screenSharePeerId: ${screenSharePeerId},
 hmsException: ${hmsException},
+hasHlsStarted: ${hasHlsStarted},
+isHLSLink: ${isHLSLink},
 roleChangeRequest: ${roleChangeRequest},
 isMeetingStarted: ${isMeetingStarted},
 isVideoOn: ${isVideoOn},
 isMicOn: ${isMicOn},
 isScreenShareOn: ${isScreenShareOn},
 screenShareTrack: ${screenShareTrack},
+curentScreenShareTrack: ${curentScreenShareTrack},
 reconnecting: ${reconnecting},
 reconnected: ${reconnected},
 isRoomEnded: ${isRoomEnded},

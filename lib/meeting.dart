@@ -27,7 +27,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
       const SnackBar(content: Text("Unable to Join"));
       Navigator.of(context).pop();
     }
-    _meetingStore.startListen();
+    _meetingStore.addUpdateListener();
   }
 
   @override
@@ -196,14 +196,15 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
 
   Widget videoPageView({required List<PeerTracKNode> filteredList}) {
     List<Widget> pageChild = [];
-    if (_meetingStore.screenShareTrack != null) {
+    if (_meetingStore.curentScreenShareTrack != null) {
       pageChild.add(RotatedBox(
         quarterTurns: 1,
         child: Container(
             margin:
                 const EdgeInsets.only(bottom: 0, left: 0, right: 100, top: 0),
             child: Observer(builder: (context) {
-              return HMSVideoView(track: _meetingStore.screenShareTrack!);
+              return HMSVideoView(
+                  track: _meetingStore.screenShareTrack as HMSVideoTrack);
             })),
       ));
     }
@@ -279,7 +280,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                     borderRadius: BorderRadius.circular(10),
                     child: (track.track != null && isVideoMuted)
                         ? HMSVideoView(
-                            track: track.track!,
+                            track: track.track as HMSVideoTrack,
                           )
                         : Container(
                             width: 200,
