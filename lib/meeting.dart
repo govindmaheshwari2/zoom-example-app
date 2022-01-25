@@ -238,8 +238,6 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
   Widget videoViewGrid(int count, int start, List<PeerTracKNode> tracks) {
     ObservableMap<String, HMSTrackUpdate> trackUpdate =
         _meetingStore.trackStatus;
-    ObservableList<HMSPeer> peers = _meetingStore.peers;
-
     return GridView.builder(
       itemCount: count,
       physics: const NeverScrollableScrollPhysics(),
