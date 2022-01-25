@@ -213,8 +213,6 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
         // video status, tracks, find peerId
 
         // return Observer(builder: (context) {
-        //   HMSPeer peer = peers[peers.indexWhere(
-        //       (element) => element.peerId == tracks[start + index].peerId)];
         //   return videoTile(
         //       tracks[start + index],
         //       !(tracks[start + index].track?.peer?.isLocal ?? false
@@ -222,7 +220,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
         //           : (trackUpdate[tracks[start + index].peerId]) ==
         //               HMSTrackUpdate.trackMuted),
         //       MediaQuery.of(context).size.width / 2 - 25,
-        //       peer.metadata.toString() == "{\"isHandRaised\":true}");
+        //      tracks[start + index].isRaiseHand);
         // });
       },
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
