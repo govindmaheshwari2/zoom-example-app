@@ -72,7 +72,8 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                         child: Observer(
                           builder: (_) {
                             if (_meetingStore.isRoomEnded && !selfLeave) {
-                              Navigator.pop(context);
+                              Navigator.popUntil(
+                                  context, ModalRoute.withName('/main'));
                             }
                             if (_meetingStore.peerTracks.isEmpty) {
                               return const Center(
@@ -253,7 +254,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                   : (trackUpdate[tracks[start + index].peerId]) ==
                       HMSTrackUpdate.trackMuted),
               MediaQuery.of(context).size.width / 2 - 25,
-              peer.metadata == "{\"isHandRaised\":true}");
+              tracks[start + index].isRaiseHand);
         });
       },
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
