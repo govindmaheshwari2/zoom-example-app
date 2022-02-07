@@ -152,23 +152,7 @@ class _MessageState extends State<Message> {
                         onTap: () {
                           String message = messageTextController.text;
                           if (message.isEmpty) return;
-
-                          DateTime currentTime = DateTime.now();
-                          final DateFormat formatter =
-                              DateFormat('yyyy-MMM-dd hh:mm a');
-
                           _meetingStore.sendBroadcastMessage(message);
-                          _meetingStore.addMessage(HMSMessage(
-                            sender: _meetingStore.localPeer!,
-                            message: message,
-                            type: "chat",
-                            time: formatter.format(currentTime),
-                            hmsMessageRecipient: HMSMessageRecipient(
-                                recipientPeer: null,
-                                recipientRoles: null,
-                                hmsMessageRecipientType:
-                                    HMSMessageRecipientType.BROADCAST),
-                          ));
                           messageTextController.clear();
                         },
                         child: const Icon(
