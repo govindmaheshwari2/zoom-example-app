@@ -205,7 +205,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                 const EdgeInsets.only(bottom: 0, left: 0, right: 100, top: 0),
             child: Observer(builder: (context) {
               return HMSVideoView(
-                  track: _meetingStore.screenShareTrack as HMSVideoTrack);
+                  track: _meetingStore.curentScreenShareTrack as HMSVideoTrack);
             })),
       ));
     }
