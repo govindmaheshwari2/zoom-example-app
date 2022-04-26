@@ -3,14 +3,14 @@ import 'package:mobx/mobx.dart';
 
 @observable
 class PeerTracKNode {
-  String peerId;
+  HMSPeer peer;
   String name;
   bool isRaiseHand;
   @observable
   HMSVideoTrack? track;
   HMSTrack? audioTrack;
   PeerTracKNode(
-      {required this.peerId,
+      {required this.peer,
       this.track,
       this.name = "",
       this.audioTrack,
@@ -21,13 +21,13 @@ class PeerTracKNode {
       identical(this, other) ||
       other is PeerTracKNode &&
           runtimeType == other.runtimeType &&
-          peerId == other.peerId;
+          peer.peerId == other.peer.peerId;
 
   @override
   String toString() {
-    return 'PeerTracKNode{peerId: $peerId, name: $name, track: $track}';
+    return 'PeerTracKNode{peerId: ${peer.peerId}, name: $name, track: $track}';
   }
 
   @override
-  int get hashCode => peerId.hashCode;
+  int get hashCode => peer.peerId.hashCode;
 }
