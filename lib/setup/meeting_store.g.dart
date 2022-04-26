@@ -621,44 +621,11 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
   }
 
   @override
-  void removeTrackWithPeerId(String peerId) {
-    final _$actionInfo = _$MeetingStoreBaseActionController.startAction(
-        name: 'MeetingStoreBase.removeTrackWithPeerId');
-    try {
-      return super.removeTrackWithPeerId(peerId);
-    } finally {
-      _$MeetingStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void removeTrackWithPeerIdExtra(String trackId) {
     final _$actionInfo = _$MeetingStoreBaseActionController.startAction(
         name: 'MeetingStoreBase.removeTrackWithPeerIdExtra');
     try {
       return super.removeTrackWithPeerIdExtra(trackId);
-    } finally {
-      _$MeetingStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  int insertTrackWithPeerId(HMSPeer peer) {
-    final _$actionInfo = _$MeetingStoreBaseActionController.startAction(
-        name: 'MeetingStoreBase.insertTrackWithPeerId');
-    try {
-      return super.insertTrackWithPeerId(peer);
-    } finally {
-      _$MeetingStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void addTrack(HMSTrack track, HMSPeer peer) {
-    final _$actionInfo = _$MeetingStoreBaseActionController.startAction(
-        name: 'MeetingStoreBase.addTrack');
-    try {
-      return super.addTrack(track, peer);
     } finally {
       _$MeetingStoreBaseActionController.endAction(_$actionInfo);
     }

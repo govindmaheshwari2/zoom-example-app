@@ -245,9 +245,9 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
         return Observer(builder: (context) {
           return videoTile(
               tracks[start + index],
-              !(tracks[start + index].track?.peer?.isLocal ?? false
+              !(tracks[start + index].peer.isLocal
                   ? !_meetingStore.isVideoOn
-                  : (trackUpdate[tracks[start + index].peerId]) ==
+                  : (trackUpdate[tracks[start + index].peer.peerId]) ==
                       HMSTrackUpdate.trackMuted),
               MediaQuery.of(context).size.width / 2 - 25,
               tracks[start + index].isRaiseHand);

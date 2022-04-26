@@ -232,17 +232,6 @@ class HMSSDKInteractor {
         name: name, hmsActionResultListener: hmsActionResultListener);
   }
 
-  void startHLSStreaming(
-      String meetingUrl, HMSActionResultListener hmsActionResultListener) {
-    hmsSDK.startHlsStreaming(meetingUrl, "HLS started from Flutter",
-        hmsActionResultListener: hmsActionResultListener);
-  }
-
-  void stopHLSStreaming(
-      {required HMSActionResultListener hmsActionResultListener}) {
-    hmsSDK.stopHlsStreaming(hmsActionResultListener: hmsActionResultListener);
-  }
-
   void changeTrackStateForRole(bool mute, HMSTrackKind? kind, String? source,
       List<HMSRole>? roles, HMSActionResultListener? hmsActionResultListener) {
     hmsSDK.changeTrackStateForRole(
