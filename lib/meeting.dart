@@ -82,7 +82,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                         child: IconButton(
                           icon: const Icon(Icons.mic),
                           onPressed: () {
-                            // Toggle mic
+                            // Switch mic
                           },
                           color: Colors.blue,
                         ),
@@ -94,7 +94,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                         child: IconButton(
                           icon: const Icon(Icons.videocam),
                           onPressed: () {
-                            // Toggle video
+                            // Switch video
                           },
                           color: Colors.blue,
                         ),
