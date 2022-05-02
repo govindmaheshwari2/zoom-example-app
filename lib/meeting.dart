@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:hmssdk_flutter/hmssdk_flutter.dart';
 import 'package:mobx/mobx.dart';
 import 'package:zoom/message.dart';
-import 'package:zoom/setup/peerTrackNode.dart';
+import 'package:zoom/setup/peer_track_node.dart';
 
 class Meeting extends StatefulWidget {
   final String name, roomLink;
@@ -168,7 +168,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
             ));
   }
 
-  Widget videoPageView(List<PeerTracKNode> filteredList) {
+  Widget videoPageView(List<PeerTrackNode> filteredList) {
     List<Widget> pageChild = [];
 
     // Screen share code and add it to pageChild for viewing it at first page
@@ -188,7 +188,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
     );
   }
 
-  Widget singleVideoPageView(int count, int index, List<PeerTracKNode> tracks) {
+  Widget singleVideoPageView(int count, int index, List<PeerTrackNode> tracks) {
     return Align(
         alignment: Alignment.center,
         child: Container(
@@ -199,7 +199,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
             })));
   }
 
-  Widget videoViewGrid(int count, int start, List<PeerTracKNode> tracks) {
+  Widget videoViewGrid(int count, int start, List<PeerTrackNode> tracks) {
     //  ObservableMap<String, HMSTrackUpdate> trackUpdate =_meetingStore.trackStatus;
 
     return GridView.builder(
@@ -231,7 +231,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
   }
 
   Widget videoTile(
-      PeerTracKNode track, bool isVideoMuted, double size, bool isHandRaised) {
+      PeerTrackNode track, bool isVideoMuted, double size, bool isHandRaised) {
     return Stack(
       children: [
         Column(
