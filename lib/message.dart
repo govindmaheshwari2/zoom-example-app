@@ -6,7 +6,7 @@ import 'package:zoom/setup/meeting_store.dart';
 
 class Message extends StatefulWidget {
   final MeetingStore meetingStore;
-  Message({Key? key, required this.meetingStore}) : super(key: key);
+  const Message({Key? key, required this.meetingStore}) : super(key: key);
 
   @override
   _MessageState createState() => _MessageState();
@@ -31,6 +31,7 @@ class _MessageState extends State<Message> {
   @override
   Widget build(BuildContext context) {
     widthOfScreen = MediaQuery.of(context).size.width;
+    final DateFormat formatter = DateFormat('yyyy-MM-dd hh:mm a');
     return FractionallySizedBox(
       heightFactor: 0.8,
       child: Container(
@@ -95,8 +96,8 @@ class _MessageState extends State<Message> {
                                       ),
                                     ),
                                     Text(
-                                      _meetingStore.messages[index].time
-                                          .toString(),
+                                      formatter.format(
+                                          _meetingStore.messages[index].time),
                                       style: const TextStyle(
                                           fontSize: 10.0,
                                           color: Colors.black,

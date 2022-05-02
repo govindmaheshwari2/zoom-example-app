@@ -6,9 +6,8 @@ import 'package:intl/intl.dart';
 //Project imports
 import 'package:hmssdk_flutter/hmssdk_flutter.dart';
 import 'package:zoom/service/room_service.dart';
-import 'package:zoom/setup/HmsSdkManager.dart';
 import 'package:zoom/setup/hms_sdk_interactor.dart';
-import 'package:zoom/setup/peerTrackNode.dart';
+import 'package:zoom/setup/peer_track_node.dart';
 
 part 'meeting_store.g.dart';
 
@@ -17,10 +16,10 @@ class MeetingStore = MeetingStoreBase with _$MeetingStore;
 abstract class MeetingStoreBase extends ChangeNotifier
     with Store
     implements HMSUpdateListener, HMSActionResultListener {
-  late HMSSDKInteractor _hmssdkInteractor;
+  late HMSSDKInteractor _hmsSDKInteractor;
 
   MeetingStoreBase() {
-    _hmssdkInteractor = HmsSdkManager.hmsSdkInteractor!;
+    _hmsSDKInteractor = HMSSDKInteractor();
   }
 
   // HMSLogListener
@@ -115,14 +114,14 @@ abstract class MeetingStoreBase extends ChangeNotifier
 
   @action
   void addUpdateListener() {
-    HmsSdkManager.hmsSdkInteractor?.addUpdateListener(this);
+    _hmsSDKInteractor.addUpdateListener(this);
     // startHMSLogger(HMSLogLevel.VERBOSE, HMSLogLevel.VERBOSE);
     // addLogsListener();
   }
 
   @action
   void removeUpdateListener() {
-    _hmssdkInteractor.removeUpdateListener(this);
+    _hmsSDKInteractor.removeUpdateListener(this);
     // removeLogsListener();
   }
 
@@ -136,55 +135,55 @@ abstract class MeetingStoreBase extends ChangeNotifier
         userName: user,
         endPoint: token[1] == "true" ? "" : "https://qa-init.100ms.live/init");
 
-    await HmsSdkManager.hmsSdkInteractor?.join(config: config);
+    await _hmsSDKInteractor.join(config: config);
     isMeetingStarted = true;
     return true;
   }
 
-// TODO: add await to resolve crash on leave?
   void leave() async {
     if (isScreenShareOn) {
       isScreenShareOn = false;
-      _hmssdkInteractor.stopScreenShare();
+      _hmsSDKInteractor.stopScreenShare();
     }
-    _hmssdkInteractor.leave(hmsActionResultListener: this);
+    _hmsSDKInteractor.leave(hmsActionResultListener: this);
     isRoomEnded = true;
     peerTracks.clear();
   }
 
   @action
   Future<void> switchAudio() async {
-    await _hmssdkInteractor.switchAudio(isOn: isMicOn);
+    await _hmsSDKInteractor.switchAudio(isOn: isMicOn);
     isMicOn = !isMicOn;
   }
 
   @action
   Future<void> switchVideo() async {
-    await _hmssdkInteractor.switchVideo(isOn: isVideoOn);
-    if (isVideoOn)
+    await _hmsSDKInteractor.switchVideo(isOn: isVideoOn);
+    if (isVideoOn) {
       trackStatus[localPeer!.peerId] = HMSTrackUpdate.trackMuted;
-    else
+    } else {
       trackStatus[localPeer!.peerId] = HMSTrackUpdate.trackUnMuted;
+    }
 
-    this.isVideoOn = !isVideoOn;
+    isVideoOn = !isVideoOn;
   }
 
   @action
   Future<void> switchCamera() async {
-    await _hmssdkInteractor.switchCamera();
+    await _hmsSDKInteractor.switchCamera();
   }
 
   @action
   void sendBroadcastMessage(String message) {
-    _hmssdkInteractor.sendBroadcastMessage(message, this);
+    _hmsSDKInteractor.sendBroadcastMessage(message, this);
   }
 
   void sendDirectMessage(String message, HMSPeer peer) async {
-    _hmssdkInteractor.sendDirectMessage(message, peer, this);
+    _hmsSDKInteractor.sendDirectMessage(message, peer, this);
   }
 
   void sendGroupMessage(String message, List<HMSRole> roles) async {
-    _hmssdkInteractor.sendGroupMessage(message, roles, this);
+    _hmsSDKInteractor.sendGroupMessage(message, roles, this);
   }
 
   @action
@@ -198,21 +197,19 @@ abstract class MeetingStoreBase extends ChangeNotifier
   }
 
   Future<bool> isAudioMute(HMSPeer? peer) async {
-    // TODO: add permission checks in exmaple app UI
-    return await _hmssdkInteractor.isAudioMute(peer);
+    return await _hmsSDKInteractor.isAudioMute(peer);
   }
 
   Future<bool> isVideoMute(HMSPeer? peer) async {
-    // TODO: add permission checks in exmaple app UI
-    return await _hmssdkInteractor.isVideoMute(peer);
+    return await _hmsSDKInteractor.isVideoMute(peer);
   }
 
   Future<bool> startCapturing() async {
-    return await _hmssdkInteractor.startCapturing();
+    return await _hmsSDKInteractor.startCapturing();
   }
 
   void stopCapturing() {
-    _hmssdkInteractor.stopCapturing();
+    _hmsSDKInteractor.stopCapturing();
   }
 
   @action
@@ -248,7 +245,7 @@ abstract class MeetingStoreBase extends ChangeNotifier
 
   @action
   void addMessage(HMSMessage message) {
-    this.messages.add(message);
+    messages.add(message);
   }
 
   @action
@@ -266,7 +263,7 @@ abstract class MeetingStoreBase extends ChangeNotifier
 
   @action
   Future<void> isScreenShareActive() async {
-    this.isScreenShareOn = await _hmssdkInteractor.isScreenShareActive();
+    isScreenShareOn = await _hmsSDKInteractor.isScreenShareActive();
   }
 
   @override
@@ -279,10 +276,11 @@ abstract class MeetingStoreBase extends ChangeNotifier
     } else {
       hasHlsStarted = false;
     }
-    if (room.hmsBrowserRecordingState?.running == true)
+    if (room.hmsBrowserRecordingState?.running == true) {
       isRecordingStarted = true;
-    else
+    } else {
       isRecordingStarted = false;
+    }
 
     for (HMSPeer each in room.peers!) {
       if (each.isLocal) {
@@ -359,7 +357,7 @@ abstract class MeetingStoreBase extends ChangeNotifier
     if (peer.isLocal &&
         trackUpdate == HMSTrackUpdate.trackMuted &&
         track.kind == HMSTrackKind.kHMSTrackKindAudio) {
-      this.isMicOn = false;
+      isMicOn = false;
     }
 
     if (peer.isLocal) {
@@ -368,7 +366,7 @@ abstract class MeetingStoreBase extends ChangeNotifier
       if (track.kind == HMSTrackKind.kHMSTrackKindVideo) {
         localTrack = track;
         if (track.isMute) {
-          this.isVideoOn = false;
+          isVideoOn = false;
         }
       }
     }
@@ -391,7 +389,7 @@ abstract class MeetingStoreBase extends ChangeNotifier
 
   @override
   void onError({required HMSException error}) {
-    this.hmsException = hmsException;
+    hmsException = hmsException;
   }
 
   @override
@@ -469,8 +467,9 @@ abstract class MeetingStoreBase extends ChangeNotifier
   @override
   void onChangeTrackStateRequest(
       {required HMSTrackChangeRequest hmsTrackChangeRequest}) {
-    if (!hmsTrackChangeRequest.mute)
+    if (!hmsTrackChangeRequest.mute) {
       addTrackChangeRequestInstance(hmsTrackChangeRequest);
+    }
   }
 
   void changeTracks(HMSTrackChangeRequest hmsTrackChangeRequest) {
@@ -492,7 +491,7 @@ abstract class MeetingStoreBase extends ChangeNotifier
       {required HMSPeer peer,
       required HMSRole roleName,
       bool forceChange = false}) {
-    _hmssdkInteractor.changeRole(
+    _hmsSDKInteractor.changeRole(
         toRole: roleName,
         forPeer: peer,
         force: forceChange,
@@ -500,11 +499,11 @@ abstract class MeetingStoreBase extends ChangeNotifier
   }
 
   Future<List<HMSRole>> getRoles() async {
-    return await _hmssdkInteractor.getRoles();
+    return await _hmsSDKInteractor.getRoles();
   }
 
   void changeTrackState(HMSTrack track, bool mute) {
-    return HmsSdkManager.hmsSdkInteractor?.changeTrackState(track, mute, this);
+    return _hmsSDKInteractor.changeTrackState(track, mute, this);
   }
 
   @action
@@ -535,8 +534,9 @@ abstract class MeetingStoreBase extends ChangeNotifier
           int index = peerTracks
               .indexWhere((element) => element.peer.peerId == peer.peerId);
           //if (index != -1) peerTracks[index].track = track;
-          if (index == -1)
-            peerTracks.add(new PeerTracKNode(peer: peer, name: peer.name));
+          if (index == -1) {
+            peerTracks.add(PeerTracKNode(peer: peer, name: peer.name));
+          }
         }
         updatePeerAt(peer);
         break;
@@ -631,77 +631,54 @@ abstract class MeetingStoreBase extends ChangeNotifier
   }
 
   void endRoom(bool lock, String? reason) {
-    _hmssdkInteractor.endRoom(lock, reason == null ? "" : reason, this);
+    _hmsSDKInteractor.endRoom(lock, reason ?? "", this);
   }
 
   void removePeerFromRoom(HMSPeer peer) {
-    _hmssdkInteractor.removePeer(peer, this);
+    _hmsSDKInteractor.removePeer(peer, this);
   }
 
   void startScreenShare() {
-    _hmssdkInteractor.startScreenShare(hmsActionResultListener: this);
+    _hmsSDKInteractor.startScreenShare(hmsActionResultListener: this);
   }
 
   void stopScreenShare() {
-    _hmssdkInteractor.stopScreenShare(hmsActionResultListener: this);
+    _hmsSDKInteractor.stopScreenShare(hmsActionResultListener: this);
   }
 
   void muteAll() {
-    _hmssdkInteractor.muteAll();
+    _hmsSDKInteractor.muteAll();
   }
 
   void unMuteAll() {
-    _hmssdkInteractor.unMuteAll();
+    _hmsSDKInteractor.unMuteAll();
   }
 
-  // Logs are currently turned Off
-  // @override
-  // void onLogMessage({required dynamic HMSLogList}) async {
-  // StaticLogger.logger?.v(HMSLogList.toString());
-  //   FirebaseCrashlytics.instance.log(HMSLogList.toString());
-  // }
-
-  // void startHMSLogger(HMSLogLevel webRtclogLevel, HMSLogLevel logLevel) {
-  //   HmsSdkManager.hmsSdkInteractor?.startHMSLogger(webRtclogLevel, logLevel);
-  // }
-  //
-  // void addLogsListener() {
-  //   HmsSdkManager.hmsSdkInteractor?.addLogsListener(this);
-  // }
-  //
-  // void removeLogsListener() {
-  //   HmsSdkManager.hmsSdkInteractor?.removeLogsListener(this);
-  // }
-  //
-  // void removeHMSLogger() {
-  //   HmsSdkManager.hmsSdkInteractor?.removeHMSLogger();
-  // }
-
   Future<HMSPeer?> getLocalPeer() async {
-    return await _hmssdkInteractor.getLocalPeer();
+    return await _hmsSDKInteractor.getLocalPeer();
   }
 
   void startRtmpOrRecording(
       {required String meetingUrl,
       required bool toRecord,
       List<String>? rtmpUrls}) async {
-    HMSRecordingConfig hmsRecordingConfig = new HMSRecordingConfig(
+    HMSRecordingConfig hmsRecordingConfig = HMSRecordingConfig(
         meetingUrl: meetingUrl, toRecord: toRecord, rtmpUrls: rtmpUrls);
 
-    _hmssdkInteractor.startRtmpOrRecording(hmsRecordingConfig, this);
+    _hmsSDKInteractor.startRtmpOrRecording(hmsRecordingConfig, this);
   }
 
   void stopRtmpAndRecording() async {
-    _hmssdkInteractor.stopRtmpAndRecording(this);
+    _hmsSDKInteractor.stopRtmpAndRecording(this);
   }
 
   Future<HMSRoom?> getRoom() async {
-    HMSRoom? room = await _hmssdkInteractor.getRoom();
+    HMSRoom? room = await _hmsSDKInteractor.getRoom();
     return room;
   }
 
   Future<HMSPeer?> getPeer({required String peerId}) async {
-    return await _hmssdkInteractor.getPeer(peerId: peerId);
+    return await _hmsSDKInteractor.getPeer(peerId: peerId);
   }
 
   bool isRaisedHand = false;
@@ -709,24 +686,24 @@ abstract class MeetingStoreBase extends ChangeNotifier
   void changeMetadata() {
     isRaisedHand = !isRaisedHand;
     String value = isRaisedHand ? "true" : "false";
-    _hmssdkInteractor.changeMetadata(
+    _hmsSDKInteractor.changeMetadata(
         metadata: "{\"isHandRaised\":$value}", hmsActionResultListener: this);
   }
 
   void setPlayBackAllowed(bool allow) {
-    _hmssdkInteractor.setPlayBackAllowed(allow);
+    _hmsSDKInteractor.setPlayBackAllowed(allow);
   }
 
   void acceptChangeRole(HMSRoleChangeRequest hmsRoleChangeRequest) {
-    _hmssdkInteractor.acceptChangeRole(hmsRoleChangeRequest, this);
+    _hmsSDKInteractor.acceptChangeRole(hmsRoleChangeRequest, this);
   }
 
   void changeName({required String name}) {
-    _hmssdkInteractor.changeName(name: name, hmsActionResultListener: this);
+    _hmsSDKInteractor.changeName(name: name, hmsActionResultListener: this);
   }
 
   void changeTrackStateForRole(bool mute, List<HMSRole>? roles) {
-    _hmssdkInteractor.changeTrackStateForRole(
+    _hmsSDKInteractor.changeTrackStateForRole(
         true, HMSTrackKind.kHMSTrackKindAudio, "regular", roles, this);
   }
 
@@ -740,7 +717,6 @@ abstract class MeetingStoreBase extends ChangeNotifier
         isRoomEnded = true;
         break;
       case HMSActionResultListenerMethod.changeTrackState:
-        // TODO: Handle this case.
         break;
       case HMSActionResultListenerMethod.changeMetadata:
         print("raised hand");
@@ -749,29 +725,24 @@ abstract class MeetingStoreBase extends ChangeNotifier
         isRoomEnded = true;
         break;
       case HMSActionResultListenerMethod.removePeer:
-        // TODO: Handle this case.
         break;
       case HMSActionResultListenerMethod.acceptChangeRole:
-        // TODO: Handle this case.
         break;
       case HMSActionResultListenerMethod.changeRole:
-        // TODO: Handle this case.
         break;
       case HMSActionResultListenerMethod.changeTrackStateForRole:
-        this.event = arguments!['roles'] == null
+        event = arguments!['roles'] == null
             ? "Successfully Muted All"
             : "Successfully Muted Role";
         break;
       case HMSActionResultListenerMethod.startRtmpOrRecording:
-        //TODO: HmsException?.code == 400(To see what this means)
-        //isRecordingStarted = true;
         break;
       case HMSActionResultListenerMethod.stopRtmpAndRecording:
         break;
       case HMSActionResultListenerMethod.unknown:
         break;
       case HMSActionResultListenerMethod.changeName:
-        this.event = "Name Changed to ${localPeer!.name}";
+        event = "Name Changed to ${localPeer!.name}";
         break;
       case HMSActionResultListenerMethod.sendBroadcastMessage:
         var message = HMSMessage(
@@ -810,10 +781,8 @@ abstract class MeetingStoreBase extends ChangeNotifier
         addMessage(message);
         break;
       case HMSActionResultListenerMethod.hlsStreamingStarted:
-        // TODO: Handle this case.
         break;
       case HMSActionResultListenerMethod.hlsStreamingStopped:
-        // TODO: Handle this case.
         break;
 
       case HMSActionResultListenerMethod.startScreenShare:
@@ -837,29 +806,29 @@ abstract class MeetingStoreBase extends ChangeNotifier
     this.hmsException = hmsException;
     switch (methodType) {
       case HMSActionResultListenerMethod.leave:
-        // TODO: Handle this case.
+        
         break;
       case HMSActionResultListenerMethod.changeTrackState:
-        // TODO: Handle this case.
+        
         break;
       case HMSActionResultListenerMethod.changeMetadata:
-        // TODO: Handle this case.
+        
         break;
       case HMSActionResultListenerMethod.endRoom:
-        // TODO: Handle this case.
+        
         print("HMSException ${hmsException.message}");
         break;
       case HMSActionResultListenerMethod.removePeer:
-        // TODO: Handle this case.
+        
         break;
       case HMSActionResultListenerMethod.acceptChangeRole:
-        // TODO: Handle this case.
+        
         break;
       case HMSActionResultListenerMethod.changeRole:
-        // TODO: Handle this case.
+        
         break;
       case HMSActionResultListenerMethod.changeTrackStateForRole:
-        this.event = "Failed to Mute";
+        event = "Failed to Mute";
         break;
       case HMSActionResultListenerMethod.startRtmpOrRecording:
         if (hmsException.code?.errorCode == "400") {
@@ -867,29 +836,29 @@ abstract class MeetingStoreBase extends ChangeNotifier
         }
         break;
       case HMSActionResultListenerMethod.stopRtmpAndRecording:
-        // TODO: Handle this case.
+        
         break;
       case HMSActionResultListenerMethod.unknown:
         print("Unknown Method Called");
         break;
       case HMSActionResultListenerMethod.changeName:
-        // TODO: Handle this case.
+        
         break;
       case HMSActionResultListenerMethod.sendBroadcastMessage:
-        // TODO: Handle this case.
+        
         print("sendBroadcastMessage failure");
         break;
       case HMSActionResultListenerMethod.sendGroupMessage:
-        // TODO: Handle this case.
+        
         break;
       case HMSActionResultListenerMethod.sendDirectMessage:
-        // TODO: Handle this case.
+        
         break;
       case HMSActionResultListenerMethod.hlsStreamingStarted:
-        // TODO: Handle this case.
+        
         break;
       case HMSActionResultListenerMethod.hlsStreamingStopped:
-        // TODO: Handle this case.
+        
         break;
 
       case HMSActionResultListenerMethod.startScreenShare:
@@ -905,7 +874,7 @@ abstract class MeetingStoreBase extends ChangeNotifier
   }
 
   Future<List<HMSPeer>?> getPeers() async {
-    return await _hmssdkInteractor.getPeers();
+    return await _hmsSDKInteractor.getPeers();
   }
 
   @override

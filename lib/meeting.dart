@@ -4,7 +4,7 @@ import 'package:hmssdk_flutter/hmssdk_flutter.dart';
 import 'package:mobx/mobx.dart';
 import 'package:zoom/message.dart';
 import 'package:zoom/setup/meeting_store.dart';
-import 'package:zoom/setup/peerTrackNode.dart';
+import 'package:zoom/setup/peer_track_node.dart';
 
 class Meeting extends StatefulWidget {
   final String name, roomLink;
