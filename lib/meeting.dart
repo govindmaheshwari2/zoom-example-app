@@ -79,7 +79,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                               return const Center(
                                   child: Text('Waiting for others to join!'));
                             }
-                            ObservableList<PeerTracKNode> peerFilteredList =
+                            ObservableList<PeerTrackNode> peerFilteredList =
                                 _meetingStore.peerTracks;
 
                             return videoPageView(
@@ -195,7 +195,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
             ));
   }
 
-  Widget videoPageView({required List<PeerTracKNode> filteredList}) {
+  Widget videoPageView({required List<PeerTrackNode> filteredList}) {
     List<Widget> pageChild = [];
     if (_meetingStore.curentScreenShareTrack != null) {
       pageChild.add(RotatedBox(
@@ -224,7 +224,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
     );
   }
 
-  Widget singleVideoPageView(int count, int index, List<PeerTracKNode> tracks) {
+  Widget singleVideoPageView(int count, int index, List<PeerTrackNode> tracks) {
     return Align(
         alignment: Alignment.center,
         child: Container(
@@ -235,7 +235,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
             })));
   }
 
-  Widget videoViewGrid(int count, int start, List<PeerTracKNode> tracks) {
+  Widget videoViewGrid(int count, int start, List<PeerTrackNode> tracks) {
     ObservableMap<String, HMSTrackUpdate> trackUpdate =
         _meetingStore.trackStatus;
     return GridView.builder(
@@ -262,7 +262,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
   }
 
   Widget videoTile(
-      PeerTracKNode track, bool isVideoMuted, double size, bool isHandRaised) {
+      PeerTrackNode track, bool isVideoMuted, double size, bool isHandRaised) {
     return Stack(
       children: [
         Column(

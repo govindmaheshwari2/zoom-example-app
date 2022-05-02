@@ -2,14 +2,14 @@ import 'package:hmssdk_flutter/hmssdk_flutter.dart';
 import 'package:mobx/mobx.dart';
 
 @observable
-class PeerTracKNode {
+class PeerTrackNode {
   HMSPeer peer;
   String name;
   bool isRaiseHand;
   @observable
   HMSVideoTrack? track;
   HMSTrack? audioTrack;
-  PeerTracKNode(
+  PeerTrackNode(
       {required this.peer,
       this.track,
       this.name = "",
@@ -19,7 +19,7 @@ class PeerTracKNode {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PeerTracKNode &&
+      other is PeerTrackNode &&
           runtimeType == other.runtimeType &&
           peer.peerId == other.peer.peerId;
 

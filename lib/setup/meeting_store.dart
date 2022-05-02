@@ -86,7 +86,7 @@ abstract class MeetingStoreBase extends ChangeNotifier
   bool isActiveSpeakerMode = false;
 
   @observable
-  ObservableList<PeerTracKNode> activeSpeakerPeerTracksStore =
+  ObservableList<PeerTrackNode> activeSpeakerPeerTracksStore =
       ObservableList.of([]);
 
   @observable
@@ -105,7 +105,7 @@ abstract class MeetingStoreBase extends ChangeNotifier
   ObservableMap<String, HMSTrackUpdate> audioTrackStatus = ObservableMap.of({});
 
   @observable
-  ObservableList<PeerTracKNode> peerTracks = ObservableList.of([]);
+  ObservableList<PeerTrackNode> peerTracks = ObservableList.of([]);
 
   HMSRoom? hmsRoom;
 
@@ -287,7 +287,7 @@ abstract class MeetingStoreBase extends ChangeNotifier
         int index = peerTracks
             .indexWhere((element) => element.peer.peerId == each.peerId);
         if (index == -1) {
-          peerTracks.add(PeerTracKNode(peer: each, name: each.name));
+          peerTracks.add(PeerTrackNode(peer: each, name: each.name));
         }
         localPeer = each;
         addPeer(localPeer!);
@@ -514,7 +514,7 @@ abstract class MeetingStoreBase extends ChangeNotifier
           int index = peerTracks
               .indexWhere((element) => element.peer.peerId == peer.peerId);
           if (index == -1) {
-            peerTracks.add(PeerTracKNode(peer: peer, name: peer.name));
+            peerTracks.add(PeerTrackNode(peer: peer, name: peer.name));
           }
         }
         addPeer(peer);
@@ -535,7 +535,7 @@ abstract class MeetingStoreBase extends ChangeNotifier
               .indexWhere((element) => element.peer.peerId == peer.peerId);
           //if (index != -1) peerTracks[index].track = track;
           if (index == -1) {
-            peerTracks.add(PeerTracKNode(peer: peer, name: peer.name));
+            peerTracks.add(PeerTrackNode(peer: peer, name: peer.name));
           }
         }
         updatePeerAt(peer);

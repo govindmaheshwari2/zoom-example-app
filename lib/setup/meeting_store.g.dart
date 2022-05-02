@@ -383,13 +383,13 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
       Atom(name: 'MeetingStoreBase.activeSpeakerPeerTracksStore');
 
   @override
-  ObservableList<PeerTracKNode> get activeSpeakerPeerTracksStore {
+  ObservableList<PeerTrackNode> get activeSpeakerPeerTracksStore {
     _$activeSpeakerPeerTracksStoreAtom.reportRead();
     return super.activeSpeakerPeerTracksStore;
   }
 
   @override
-  set activeSpeakerPeerTracksStore(ObservableList<PeerTracKNode> value) {
+  set activeSpeakerPeerTracksStore(ObservableList<PeerTrackNode> value) {
     _$activeSpeakerPeerTracksStoreAtom
         .reportWrite(value, super.activeSpeakerPeerTracksStore, () {
       super.activeSpeakerPeerTracksStore = value;
@@ -475,13 +475,13 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
   final _$peerTracksAtom = Atom(name: 'MeetingStoreBase.peerTracks');
 
   @override
-  ObservableList<PeerTracKNode> get peerTracks {
+  ObservableList<PeerTrackNode> get peerTracks {
     _$peerTracksAtom.reportRead();
     return super.peerTracks;
   }
 
   @override
-  set peerTracks(ObservableList<PeerTracKNode> value) {
+  set peerTracks(ObservableList<PeerTrackNode> value) {
     _$peerTracksAtom.reportWrite(value, super.peerTracks, () {
       super.peerTracks = value;
     });
