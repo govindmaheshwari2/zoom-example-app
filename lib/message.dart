@@ -4,7 +4,7 @@ import 'package:hmssdk_flutter/hmssdk_flutter.dart';
 import 'package:intl/intl.dart';
 
 class Message extends StatefulWidget {
-  Message({Key? key, meetingStore}) : super(key: key);
+  const Message({Key? key, meetingStore}) : super(key: key);
 
   @override
   _MessageState createState() => _MessageState();
@@ -21,6 +21,7 @@ class _MessageState extends State<Message> {
 
   @override
   Widget build(BuildContext context) {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd hh:mm a');
     widthOfScreen = MediaQuery.of(context).size.width;
     return FractionallySizedBox(
       heightFactor: 0.8,
