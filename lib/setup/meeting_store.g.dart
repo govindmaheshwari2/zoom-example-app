@@ -6,10 +6,11 @@ part of 'meeting_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$MeetingStore on MeetingStoreBase, Store {
-  final _$isSpeakerOnAtom = Atom(name: 'MeetingStoreBase.isSpeakerOn');
+  late final _$isSpeakerOnAtom =
+      Atom(name: 'MeetingStoreBase.isSpeakerOn', context: context);
 
   @override
   bool get isSpeakerOn {
@@ -24,8 +25,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$screenSharePeerIdAtom =
-      Atom(name: 'MeetingStoreBase.screenSharePeerId');
+  late final _$screenSharePeerIdAtom =
+      Atom(name: 'MeetingStoreBase.screenSharePeerId', context: context);
 
   @override
   String get screenSharePeerId {
@@ -40,7 +41,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$hmsExceptionAtom = Atom(name: 'MeetingStoreBase.hmsException');
+  late final _$hmsExceptionAtom =
+      Atom(name: 'MeetingStoreBase.hmsException', context: context);
 
   @override
   HMSException? get hmsException {
@@ -55,7 +57,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$hasHlsStartedAtom = Atom(name: 'MeetingStoreBase.hasHlsStarted');
+  late final _$hasHlsStartedAtom =
+      Atom(name: 'MeetingStoreBase.hasHlsStarted', context: context);
 
   @override
   bool get hasHlsStarted {
@@ -70,7 +73,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$isHLSLinkAtom = Atom(name: 'MeetingStoreBase.isHLSLink');
+  late final _$isHLSLinkAtom =
+      Atom(name: 'MeetingStoreBase.isHLSLink', context: context);
 
   @override
   bool get isHLSLink {
@@ -85,8 +89,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$roleChangeRequestAtom =
-      Atom(name: 'MeetingStoreBase.roleChangeRequest');
+  late final _$roleChangeRequestAtom =
+      Atom(name: 'MeetingStoreBase.roleChangeRequest', context: context);
 
   @override
   HMSRoleChangeRequest? get roleChangeRequest {
@@ -101,8 +105,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$isMeetingStartedAtom =
-      Atom(name: 'MeetingStoreBase.isMeetingStarted');
+  late final _$isMeetingStartedAtom =
+      Atom(name: 'MeetingStoreBase.isMeetingStarted', context: context);
 
   @override
   bool get isMeetingStarted {
@@ -117,7 +121,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$isVideoOnAtom = Atom(name: 'MeetingStoreBase.isVideoOn');
+  late final _$isVideoOnAtom =
+      Atom(name: 'MeetingStoreBase.isVideoOn', context: context);
 
   @override
   bool get isVideoOn {
@@ -132,7 +137,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$isMicOnAtom = Atom(name: 'MeetingStoreBase.isMicOn');
+  late final _$isMicOnAtom =
+      Atom(name: 'MeetingStoreBase.isMicOn', context: context);
 
   @override
   bool get isMicOn {
@@ -147,7 +153,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$isScreenShareOnAtom = Atom(name: 'MeetingStoreBase.isScreenShareOn');
+  late final _$isScreenShareOnAtom =
+      Atom(name: 'MeetingStoreBase.isScreenShareOn', context: context);
 
   @override
   bool get isScreenShareOn {
@@ -162,8 +169,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$screenShareTrackAtom =
-      Atom(name: 'MeetingStoreBase.screenShareTrack');
+  late final _$screenShareTrackAtom =
+      Atom(name: 'MeetingStoreBase.screenShareTrack', context: context);
 
   @override
   ObservableList<HMSTrack?> get screenShareTrack {
@@ -178,8 +185,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$curentScreenShareTrackAtom =
-      Atom(name: 'MeetingStoreBase.curentScreenShareTrack');
+  late final _$curentScreenShareTrackAtom =
+      Atom(name: 'MeetingStoreBase.curentScreenShareTrack', context: context);
 
   @override
   HMSTrack? get curentScreenShareTrack {
@@ -195,7 +202,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$reconnectingAtom = Atom(name: 'MeetingStoreBase.reconnecting');
+  late final _$reconnectingAtom =
+      Atom(name: 'MeetingStoreBase.reconnecting', context: context);
 
   @override
   bool get reconnecting {
@@ -210,7 +218,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$reconnectedAtom = Atom(name: 'MeetingStoreBase.reconnected');
+  late final _$reconnectedAtom =
+      Atom(name: 'MeetingStoreBase.reconnected', context: context);
 
   @override
   bool get reconnected {
@@ -225,7 +234,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$isRoomEndedAtom = Atom(name: 'MeetingStoreBase.isRoomEnded');
+  late final _$isRoomEndedAtom =
+      Atom(name: 'MeetingStoreBase.isRoomEnded', context: context);
 
   @override
   bool get isRoomEnded {
@@ -240,8 +250,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$isRecordingStartedAtom =
-      Atom(name: 'MeetingStoreBase.isRecordingStarted');
+  late final _$isRecordingStartedAtom =
+      Atom(name: 'MeetingStoreBase.isRecordingStarted', context: context);
 
   @override
   bool get isRecordingStarted {
@@ -256,7 +266,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$eventAtom = Atom(name: 'MeetingStoreBase.event');
+  late final _$eventAtom =
+      Atom(name: 'MeetingStoreBase.event', context: context);
 
   @override
   String get event {
@@ -271,8 +282,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$hmsTrackChangeRequestAtom =
-      Atom(name: 'MeetingStoreBase.hmsTrackChangeRequest');
+  late final _$hmsTrackChangeRequestAtom =
+      Atom(name: 'MeetingStoreBase.hmsTrackChangeRequest', context: context);
 
   @override
   HMSTrackChangeRequest? get hmsTrackChangeRequest {
@@ -288,7 +299,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$rolesAtom = Atom(name: 'MeetingStoreBase.roles');
+  late final _$rolesAtom =
+      Atom(name: 'MeetingStoreBase.roles', context: context);
 
   @override
   List<HMSRole> get roles {
@@ -303,22 +315,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$peersAtom = Atom(name: 'MeetingStoreBase.peers');
-
-  @override
-  ObservableList<HMSPeer> get peers {
-    _$peersAtom.reportRead();
-    return super.peers;
-  }
-
-  @override
-  set peers(ObservableList<HMSPeer> value) {
-    _$peersAtom.reportWrite(value, super.peers, () {
-      super.peers = value;
-    });
-  }
-
-  final _$localPeerAtom = Atom(name: 'MeetingStoreBase.localPeer');
+  late final _$localPeerAtom =
+      Atom(name: 'MeetingStoreBase.localPeer', context: context);
 
   @override
   HMSPeer? get localPeer {
@@ -333,7 +331,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$localTrackAtom = Atom(name: 'MeetingStoreBase.localTrack');
+  late final _$localTrackAtom =
+      Atom(name: 'MeetingStoreBase.localTrack', context: context);
 
   @override
   HMSTrack? get localTrack {
@@ -348,7 +347,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$screenTrackAtom = Atom(name: 'MeetingStoreBase.screenTrack');
+  late final _$screenTrackAtom =
+      Atom(name: 'MeetingStoreBase.screenTrack', context: context);
 
   @override
   HMSTrack? get screenTrack {
@@ -363,8 +363,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$isActiveSpeakerModeAtom =
-      Atom(name: 'MeetingStoreBase.isActiveSpeakerMode');
+  late final _$isActiveSpeakerModeAtom =
+      Atom(name: 'MeetingStoreBase.isActiveSpeakerMode', context: context);
 
   @override
   bool get isActiveSpeakerMode {
@@ -379,8 +379,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$activeSpeakerPeerTracksStoreAtom =
-      Atom(name: 'MeetingStoreBase.activeSpeakerPeerTracksStore');
+  late final _$activeSpeakerPeerTracksStoreAtom = Atom(
+      name: 'MeetingStoreBase.activeSpeakerPeerTracksStore', context: context);
 
   @override
   ObservableList<PeerTrackNode> get activeSpeakerPeerTracksStore {
@@ -396,7 +396,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$tracksAtom = Atom(name: 'MeetingStoreBase.tracks');
+  late final _$tracksAtom =
+      Atom(name: 'MeetingStoreBase.tracks', context: context);
 
   @override
   ObservableList<HMSTrack> get tracks {
@@ -411,7 +412,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$audioTracksAtom = Atom(name: 'MeetingStoreBase.audioTracks');
+  late final _$audioTracksAtom =
+      Atom(name: 'MeetingStoreBase.audioTracks', context: context);
 
   @override
   ObservableList<HMSTrack> get audioTracks {
@@ -426,7 +428,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$messagesAtom = Atom(name: 'MeetingStoreBase.messages');
+  late final _$messagesAtom =
+      Atom(name: 'MeetingStoreBase.messages', context: context);
 
   @override
   ObservableList<HMSMessage> get messages {
@@ -441,7 +444,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$trackStatusAtom = Atom(name: 'MeetingStoreBase.trackStatus');
+  late final _$trackStatusAtom =
+      Atom(name: 'MeetingStoreBase.trackStatus', context: context);
 
   @override
   ObservableMap<String, HMSTrackUpdate> get trackStatus {
@@ -456,8 +460,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$audioTrackStatusAtom =
-      Atom(name: 'MeetingStoreBase.audioTrackStatus');
+  late final _$audioTrackStatusAtom =
+      Atom(name: 'MeetingStoreBase.audioTrackStatus', context: context);
 
   @override
   ObservableMap<String, HMSTrackUpdate> get audioTrackStatus {
@@ -472,7 +476,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$peerTracksAtom = Atom(name: 'MeetingStoreBase.peerTracks');
+  late final _$peerTracksAtom =
+      Atom(name: 'MeetingStoreBase.peerTracks', context: context);
 
   @override
   ObservableList<PeerTrackNode> get peerTracks {
@@ -487,7 +492,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$observableMapAtom = Atom(name: 'MeetingStoreBase.observableMap');
+  late final _$observableMapAtom =
+      Atom(name: 'MeetingStoreBase.observableMap', context: context);
 
   @override
   ObservableMap<String, String> get observableMap {
@@ -502,37 +508,40 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
     });
   }
 
-  final _$joinAsyncAction = AsyncAction('MeetingStoreBase.join');
+  late final _$joinAsyncAction =
+      AsyncAction('MeetingStoreBase.join', context: context);
 
   @override
   Future<bool> join(String user, String roomUrl) {
     return _$joinAsyncAction.run(() => super.join(user, roomUrl));
   }
 
-  final _$switchAudioAsyncAction = AsyncAction('MeetingStoreBase.switchAudio');
+  late final _$switchAudioAsyncAction =
+      AsyncAction('MeetingStoreBase.switchAudio', context: context);
 
   @override
   Future<void> switchAudio() {
     return _$switchAudioAsyncAction.run(() => super.switchAudio());
   }
 
-  final _$switchVideoAsyncAction = AsyncAction('MeetingStoreBase.switchVideo');
+  late final _$switchVideoAsyncAction =
+      AsyncAction('MeetingStoreBase.switchVideo', context: context);
 
   @override
   Future<void> switchVideo() {
     return _$switchVideoAsyncAction.run(() => super.switchVideo());
   }
 
-  final _$switchCameraAsyncAction =
-      AsyncAction('MeetingStoreBase.switchCamera');
+  late final _$switchCameraAsyncAction =
+      AsyncAction('MeetingStoreBase.switchCamera', context: context);
 
   @override
   Future<void> switchCamera() {
     return _$switchCameraAsyncAction.run(() => super.switchCamera());
   }
 
-  final _$isScreenShareActiveAsyncAction =
-      AsyncAction('MeetingStoreBase.isScreenShareActive');
+  late final _$isScreenShareActiveAsyncAction =
+      AsyncAction('MeetingStoreBase.isScreenShareActive', context: context);
 
   @override
   Future<void> isScreenShareActive() {
@@ -540,8 +549,8 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
         .run(() => super.isScreenShareActive());
   }
 
-  final _$MeetingStoreBaseActionController =
-      ActionController(name: 'MeetingStoreBase');
+  late final _$MeetingStoreBaseActionController =
+      ActionController(name: 'MeetingStoreBase', context: context);
 
   @override
   void addUpdateListener() {
@@ -588,28 +597,6 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
   }
 
   @override
-  void removePeer(HMSPeer peer) {
-    final _$actionInfo = _$MeetingStoreBaseActionController.startAction(
-        name: 'MeetingStoreBase.removePeer');
-    try {
-      return super.removePeer(peer);
-    } finally {
-      _$MeetingStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void addPeer(HMSPeer peer) {
-    final _$actionInfo = _$MeetingStoreBaseActionController.startAction(
-        name: 'MeetingStoreBase.addPeer');
-    try {
-      return super.addPeer(peer);
-    } finally {
-      _$MeetingStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void removeTrackWithTrackId(String trackId) {
     final _$actionInfo = _$MeetingStoreBaseActionController.startAction(
         name: 'MeetingStoreBase.removeTrackWithTrackId');
@@ -626,17 +613,6 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
         name: 'MeetingStoreBase.removeTrackWithPeerIdExtra');
     try {
       return super.removeTrackWithPeerIdExtra(trackId);
-    } finally {
-      _$MeetingStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void onRoleUpdated(int index, HMSPeer peer) {
-    final _$actionInfo = _$MeetingStoreBaseActionController.startAction(
-        name: 'MeetingStoreBase.onRoleUpdated');
-    try {
-      return super.onRoleUpdated(index, peer);
     } finally {
       _$MeetingStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -671,17 +647,6 @@ mixin _$MeetingStore on MeetingStoreBase, Store {
         name: 'MeetingStoreBase.addTrackChangeRequestInstance');
     try {
       return super.addTrackChangeRequestInstance(hmsTrackChangeRequest);
-    } finally {
-      _$MeetingStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void updatePeerAt(dynamic peer) {
-    final _$actionInfo = _$MeetingStoreBaseActionController.startAction(
-        name: 'MeetingStoreBase.updatePeerAt');
-    try {
-      return super.updatePeerAt(peer);
     } finally {
       _$MeetingStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -732,7 +697,6 @@ isRecordingStarted: ${isRecordingStarted},
 event: ${event},
 hmsTrackChangeRequest: ${hmsTrackChangeRequest},
 roles: ${roles},
-peers: ${peers},
 localPeer: ${localPeer},
 localTrack: ${localTrack},
 screenTrack: ${screenTrack},

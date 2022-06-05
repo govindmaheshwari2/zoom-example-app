@@ -278,7 +278,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                     child: (track.track != null && isVideoMuted)
                         ? HMSVideoView(
                             track: track.track as HMSVideoTrack,
-                          )
+                            scaleType: ScaleType.SCALE_ASPECT_FILL)
                         : Container(
                             width: 200,
                             height: 200,

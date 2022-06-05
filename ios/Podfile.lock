@@ -1,11 +1,11 @@
 PODS:
   - Flutter (1.0.0)
-  - HMSSDK (0.2.4):
-    - HMSWebRTC (= 1.0.4518)
-  - hmssdk_flutter (0.5.0):
+  - HMSSDK (0.3.1):
+    - HMSWebRTC (= 1.0.4897)
+  - hmssdk_flutter (0.7.2):
     - Flutter
-    - HMSSDK
-  - HMSWebRTC (1.0.4518)
+    - HMSSDK (= 0.3.1)
+  - HMSWebRTC (1.0.4897)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -24,10 +24,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  HMSSDK: 22a147d4869cf371f66803bb72fa9158b5d33823
-  hmssdk_flutter: 598d4d488960e4d3fec1d4e25ed4fb878941df50
-  HMSWebRTC: 599fb1d886daecd6e58984f84224d708bce8b565
+  HMSSDK: 9780df180a4c8bd3446fd2981b338856fd02b3a4
+  hmssdk_flutter: 3fed63723ebebd88699728f9a6fd93984bf51c74
+  HMSWebRTC: aa317dbbf56a191463a90491e5e37f298f8fa29c
 
-PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
