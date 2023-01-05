@@ -5,9 +5,9 @@ import 'package:intl/intl.dart';
 
 //Project imports
 import 'package:hmssdk_flutter/hmssdk_flutter.dart';
-import 'package:zoom/service/room_service.dart';
-import 'package:zoom/setup/hms_sdk_interactor.dart';
-import 'package:zoom/setup/peer_track_node.dart';
+import 'package:mobx_example/service/room_service.dart';
+import 'package:mobx_example/setup/hms_sdk_interactor.dart';
+import 'package:mobx_example/setup/peer_track_node.dart';
 
 part 'meeting_store.g.dart';
 
@@ -48,10 +48,10 @@ abstract class MeetingStoreBase extends ChangeNotifier
   @observable
   bool isScreenShareOn = false;
   @observable
-  ObservableList<HMSTrack?> screenShareTrack = ObservableList.of([]);
+  ObservableList<HMSVideoTrack?> screenShareTrack = ObservableList.of([]);
 
   @observable
-  HMSTrack? curentScreenShareTrack;
+  HMSVideoTrack? curentScreenShareTrack;
 
   @observable
   bool reconnecting = false;
@@ -130,6 +130,7 @@ abstract class MeetingStoreBase extends ChangeNotifier
     HMSConfig config = HMSConfig(
         authToken: token[0]!,
         userName: user,
+        // endPoint is only required by 100ms Team. Client developers should not use `endPoint`
         endPoint: token[1] == "true" ? "" : "https://qa-init.100ms.live/init");
 
     await _hmsSDKInteractor.join(config: config);
@@ -138,10 +139,6 @@ abstract class MeetingStoreBase extends ChangeNotifier
   }
 
   void leave() async {
-    if (isScreenShareOn) {
-      isScreenShareOn = false;
-      _hmsSDKInteractor.stopScreenShare();
-    }
     _hmsSDKInteractor.leave(hmsActionResultListener: this);
     isRoomEnded = true;
     peerTracks.clear();
@@ -360,7 +357,7 @@ abstract class MeetingStoreBase extends ChangeNotifier
   }
 
   @override
-  void onError({required HMSException error}) {
+  void onHMSError({required HMSException error}) {
     hmsException = hmsException;
   }
 
@@ -554,7 +551,7 @@ abstract class MeetingStoreBase extends ChangeNotifier
               ? HMSTrackUpdate.trackMuted
               : HMSTrackUpdate.trackUnMuted;
         } else {
-          screenShareTrack.add(track);
+          screenShareTrack.add(track as HMSVideoTrack);
           curentScreenShareTrack = screenShareTrack.first;
           screenSharePeerId = peer.peerId;
           isScreenShareActive();
@@ -647,19 +644,6 @@ abstract class MeetingStoreBase extends ChangeNotifier
     return await _hmsSDKInteractor.getPeer(peerId: peerId);
   }
 
-  bool isRaisedHand = false;
-
-  void changeMetadata() {
-    isRaisedHand = !isRaisedHand;
-    String value = isRaisedHand ? "true" : "false";
-    _hmsSDKInteractor.changeMetadata(
-        metadata: "{\"isHandRaised\":$value}", hmsActionResultListener: this);
-  }
-
-  void setPlayBackAllowed(bool allow) {
-    _hmsSDKInteractor.setPlayBackAllowed(allow);
-  }
-
   void acceptChangeRole(HMSRoleChangeRequest hmsRoleChangeRequest) {
     _hmsSDKInteractor.acceptChangeRole(hmsRoleChangeRequest, this);
   }
@@ -674,6 +658,11 @@ abstract class MeetingStoreBase extends ChangeNotifier
   }
 
   @override
+  void onAudioDeviceChanged(
+      {HMSAudioDevice? currentAudioDevice,
+      List<HMSAudioDevice>? availableAudioDevice}) {}
+
+  @override
   void onSuccess(
       {HMSActionResultListenerMethod methodType =
           HMSActionResultListenerMethod.unknown,
@@ -682,30 +671,16 @@ abstract class MeetingStoreBase extends ChangeNotifier
       case HMSActionResultListenerMethod.leave:
         isRoomEnded = true;
         break;
-      case HMSActionResultListenerMethod.changeTrackState:
-        break;
       case HMSActionResultListenerMethod.changeMetadata:
         print("raised hand");
         break;
       case HMSActionResultListenerMethod.endRoom:
         isRoomEnded = true;
         break;
-      case HMSActionResultListenerMethod.removePeer:
-        break;
-      case HMSActionResultListenerMethod.acceptChangeRole:
-        break;
-      case HMSActionResultListenerMethod.changeRole:
-        break;
       case HMSActionResultListenerMethod.changeTrackStateForRole:
         event = arguments!['roles'] == null
             ? "Successfully Muted All"
             : "Successfully Muted Role";
-        break;
-      case HMSActionResultListenerMethod.startRtmpOrRecording:
-        break;
-      case HMSActionResultListenerMethod.stopRtmpAndRecording:
-        break;
-      case HMSActionResultListenerMethod.unknown:
         break;
       case HMSActionResultListenerMethod.changeName:
         event = "Name Changed to ${localPeer!.name}";
@@ -746,19 +721,15 @@ abstract class MeetingStoreBase extends ChangeNotifier
                 hmsMessageRecipientType: HMSMessageRecipientType.DIRECT));
         addMessage(message);
         break;
-      case HMSActionResultListenerMethod.hlsStreamingStarted:
-        break;
-      case HMSActionResultListenerMethod.hlsStreamingStopped:
-        break;
-
       case HMSActionResultListenerMethod.startScreenShare:
         print("startScreenShare success");
         isScreenShareActive();
         break;
-
       case HMSActionResultListenerMethod.stopScreenShare:
         print("stopScreenShare success");
         isScreenShareActive();
+        break;
+      default:
         break;
     }
   }
@@ -772,47 +743,26 @@ abstract class MeetingStoreBase extends ChangeNotifier
     this.hmsException = hmsException;
     switch (methodType) {
       case HMSActionResultListenerMethod.leave:
+        print("Failed to Leave");
         break;
-      case HMSActionResultListenerMethod.changeTrackState:
-        break;
-      case HMSActionResultListenerMethod.changeMetadata:
         break;
       case HMSActionResultListenerMethod.endRoom:
         print("HMSException ${hmsException.message}");
-        break;
-      case HMSActionResultListenerMethod.removePeer:
-        break;
-      case HMSActionResultListenerMethod.acceptChangeRole:
-        break;
-      case HMSActionResultListenerMethod.changeRole:
         break;
       case HMSActionResultListenerMethod.changeTrackStateForRole:
         event = "Failed to Mute";
         break;
       case HMSActionResultListenerMethod.startRtmpOrRecording:
-        if (hmsException.code?.errorCode == "400") {
+        if (hmsException.code?.errorCode == 400) {
           isRecordingStarted = true;
         }
-        break;
-      case HMSActionResultListenerMethod.stopRtmpAndRecording:
         break;
       case HMSActionResultListenerMethod.unknown:
         print("Unknown Method Called");
         break;
-      case HMSActionResultListenerMethod.changeName:
-        break;
       case HMSActionResultListenerMethod.sendBroadcastMessage:
         print("sendBroadcastMessage failure");
         break;
-      case HMSActionResultListenerMethod.sendGroupMessage:
-        break;
-      case HMSActionResultListenerMethod.sendDirectMessage:
-        break;
-      case HMSActionResultListenerMethod.hlsStreamingStarted:
-        break;
-      case HMSActionResultListenerMethod.hlsStreamingStopped:
-        break;
-
       case HMSActionResultListenerMethod.startScreenShare:
         print("startScreenShare exception");
         isScreenShareActive();
@@ -821,6 +771,8 @@ abstract class MeetingStoreBase extends ChangeNotifier
       case HMSActionResultListenerMethod.stopScreenShare:
         print("stopScreenShare exception");
         isScreenShareActive();
+        break;
+      default:
         break;
     }
   }
