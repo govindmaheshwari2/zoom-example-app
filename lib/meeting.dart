@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:hmssdk_flutter/hmssdk_flutter.dart';
 import 'package:mobx/mobx.dart';
-import 'package:zoom/message.dart';
-import 'package:zoom/setup/meeting_store.dart';
-import 'package:zoom/setup/peer_track_node.dart';
+import 'package:mobx_example/message.dart';
+import 'package:mobx_example/setup/meeting_store.dart';
+import 'package:mobx_example/setup/peer_track_node.dart';
 
 class Meeting extends StatefulWidget {
   final String name, roomLink;
@@ -33,7 +33,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     _meetingStore = MeetingStore();
     initMeeting();
   }
@@ -44,7 +44,8 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
       child: Scaffold(
         backgroundColor: Colors.grey,
         appBar: AppBar(
-          title: const Text("100ms Zoom"),
+          title: const Text("100ms mobx"),
+          automaticallyImplyLeading: false,
           actions: [
             IconButton(
                 onPressed: () {
@@ -130,23 +131,27 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                         ),
                       );
                     }),
-                    CircleAvatar(
-                      backgroundColor: Colors.black,
-                      child: IconButton(
-                        icon: Image.asset(
-                          'assets/raise_hand.png',
-                          color:
-                              raisedHand ? Colors.amber.shade300 : Colors.grey,
+                    Observer(builder: (context) {
+                      return CircleAvatar(
+                        backgroundColor: Colors.black,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.screen_share,
+                            color: _meetingStore.isScreenShareOn
+                                ? Colors.green
+                                : Colors.grey,
+                          ),
+                          onPressed: () {
+                            if (!_meetingStore.isScreenShareOn) {
+                              _meetingStore.startScreenShare();
+                            } else {
+                              _meetingStore.stopScreenShare();
+                            }
+                          },
+                          color: Colors.blue,
                         ),
-                        onPressed: () {
-                          setState(() {
-                            raisedHand = !raisedHand;
-                          });
-                          _meetingStore.changeMetadata();
-                        },
-                        color: Colors.blue,
-                      ),
-                    ),
+                      );
+                    }),
                     CircleAvatar(
                       backgroundColor: Colors.black,
                       child: IconButton(
@@ -181,7 +186,8 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                   style: TextStyle(fontSize: 24)),
               actions: [
                 ElevatedButton(
-                    style: ElevatedButton.styleFrom(primary: Colors.red),
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.red),
                     onPressed: () => {
                           _meetingStore.leave(),
                           Navigator.pop(context, true),
@@ -204,8 +210,7 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
             margin:
                 const EdgeInsets.only(bottom: 0, left: 0, right: 100, top: 0),
             child: Observer(builder: (context) {
-              return HMSVideoView(
-                  track: _meetingStore.curentScreenShareTrack as HMSVideoTrack);
+              return HMSVideoView(track: _meetingStore.curentScreenShareTrack!);
             })),
       ));
     }
