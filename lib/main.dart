@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:zoom/meeting.dart';
+import 'package:mobx_example/meeting.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '100ms Zoom',
+      title: 'Zoom App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -30,15 +33,32 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TextEditingController txtName =
-      TextEditingController(text: "");
+  Future<bool> getPermissions() async {
+    if (Platform.isIOS) return true;
+    await Permission.camera.request();
+    await Permission.microphone.request();
+    await Permission.bluetoothConnect.request();
+
+    while ((await Permission.camera.isDenied)) {
+      await Permission.camera.request();
+    }
+    while ((await Permission.microphone.isDenied)) {
+      await Permission.microphone.request();
+    }
+    while ((await Permission.bluetoothConnect.isDenied)) {
+      await Permission.bluetoothConnect.request();
+    }
+    return true;
+  }
+
+  TextEditingController txtName = TextEditingController(text: "");
   TextEditingController txtId = TextEditingController(
-      text: "");
+      text: "https://yogi-live.app.100ms.live/streaming/preview/qii-tow-sjq");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Zoom Clone"),
+        title: const Text("mobx Clone"),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -71,15 +91,17 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Meeting(
-                            name: txtName.text,
-                            roomLink: txtId.text,
-                          )),
-                );
+              onPressed: () async {
+                if (await getPermissions()) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Meeting(
+                              name: txtName.text,
+                              roomLink: txtId.text,
+                            )),
+                  );
+                }
               },
               child: const Text(
                 "Join",
