@@ -104,17 +104,18 @@ class _MeetingState extends State<Meeting> with WidgetsBindingObserver {
                       return CircleAvatar(
                         backgroundColor: Colors.black,
                         child: IconButton(
-                          icon: Image.asset(
-                            'assets/raise_hand.png',
-                            color: raisedHand
-                                ? Colors.amber.shade300
+                          icon: Icon(
+                            Icons.screen_share,
+                            color: _meetingStore.isScreenShareOn
+                                ? Colors.green
                                 : Colors.grey,
                           ),
                           onPressed: () {
-                            setState(() {
-                              raisedHand = !raisedHand;
-                            });
-                            // Toggle Raise Hand
+                            if (!_meetingStore.isScreenShareOn) {
+                              _meetingStore.startScreenShare();
+                            } else {
+                              _meetingStore.stopScreenShare();
+                            }
                           },
                           color: Colors.blue,
                         ),
